@@ -1,0 +1,16 @@
+#openseadragon {
+  width: 100vw;
+  height: 100vh;
+}
+
+#ratio {
+  display: flex;
+  align-items: center;
+  font-size: 10v;
+  font-weight: bold;
+  color: rgba(255, 0, 0, 1.0);
+  position: fixed;
+  z-index: 9999;
+  left: 100px;
+  top: 100px
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="common.css">
+</head>
+
+<body>
+
+  <div id="ratio"></div>
+  <div id="openseadragon"></div>
+
+</body>
+
+
+<script type="text/javascript" src="lib/openseadragon.min.js"></script>
+<script type="text/javascript" src="images.js"></script>
+<script type="text/javascript">
+  const TILESERVER = "localhost";
+  const WSSERVER = "localhost";
+  //const TILESERVER = "192.168.86.63";
+  //const WSSERVER = "192.168.86.63";
+  const TILEPORT = 8200;
+  const WSPORT = 8180;
+  const viewer = OpenSeadragon({
+    id: "openseadragon",
+    prefixUrl: "images/",
+    debugMode: false,
+    drawer: 'canvas',
+    crossOriginPolicy: 'Anonymous',
+    showNavigator: false,
+    showNavigationControls: false
+  });
+  const url = URL.parse(window.location.href);
+  const params = new URLSearchParams(url.search);
+  const x = params.get("x") || 0;
+  const y = params.get("y") || 0;
+  const w = params.get("w") || 15;
+  const h = params.get("h") || 1;
+
+  const ratioelt = document.getElementById("ratio");
+  viewer.addHandler('after-resize', printsize);
+  function printsize(event) {
+    const cs = viewer.viewport.getContainerSize()
+    ratioelt.innerHTML = `ratio: ${Math.round(100 * cs.x / cs.y) / 100}`;
+    setInterval(() => {
+       ratioelt.innerHTML = "";
+    }, 4000);
+  }
+  const ws = new WebSocket(`ws://${WSSERVER}:${WSPORT}`);
+  var current_image = null;
+  ws.addEventListener("open", () => {
+    ws.addEventListener("message", (event) => {
+      const json = JSON.parse(event.data);
+      if (json["action"] == "update") {
+        const image = json["image"];
+        const rows = json["wall"]["rows"];
+        const cols = json["wall"]["cols"];
+        const master_bounds = json["bounds"];
+        const rowsize = master_bounds.h / rows;
+        const colsize = master_bounds.w / cols;
+        if (current_image != image) {
+          viewer.world.removeAll();
+          current_image = image;
+          if (image) {
+            const imagedef = images[image];
+            viewer.addTiledImage({
+              tileSource: {
+                ...imagedef,
+                getTileUrl: function (level, x, y) {
+                  const lvl = 0 == 0 ? (imagedef.maxLevel - level) : 0 - (imagedef.maxLevel - level);
+                  return `http://${TILESERVER}:${TILEPORT}/tile/${image}/${lvl}/${x}/${y}`;
+                }
+              }
+            });
+          }
+        }
+          const bounds = new OpenSeadragon.Rect(master_bounds.x + x * colsize, master_bounds.y + y * rowsize,
+            w * colsize,
+            h * rowsize);
+          //    console.log(master_bounds, bounds);
+          viewer.viewport.fitBounds(bounds, false);
+        }
+      ws.send(JSON.stringify({ action: "register", type: "client", x: x, y: y, w: w, h: h }));
+    });
+  });
+</script>
+
+</html>

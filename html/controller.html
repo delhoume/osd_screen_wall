@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Controller</title>
+    <link rel="stylesheet" type="text/css" href="common.css">
+</head>
+
+<body>
+  <div id="ratio"></div>
+  <div id="openseadragon"></div>
+</body>
+
+<script type="text/javascript" src="lib/openseadragon.min.js"></script>
+<script type="text/javascript" src="images.js"></script>
+<script type="text/javascript" `>
+  const TILESERVER = "localhost";
+  const WSSERVER = "localhost";
+  const TILEPORT = 8200;
+  const WSPORT = 8180;
+  const viewer = OpenSeadragon({
+    id: "openseadragon",
+    prefixUrl: "images/",
+    drawer: 'canvas',
+    crossOriginPolicy: 'Anonymous',
+    showNavigator: true,
+    navigatorAutoFade: false,
+    navigatorBackground: "#fff",
+    navigatorBorderColor: "#555",
+    navigatorDisplayRegionColor: "#900",
+  });
+
+  const ratioelt = document.getElementById("ratio");
+  viewer.addHandler('after-resize', printsize);
+  function printsize(event) {
+    const cs = viewer.viewport.getContainerSize();
+    ratioelt.innerHTML = `ratio: ${Math.round(100 * cs.x / cs.y) / 100}`;
+    setInterval(() => {
+       ratioelt.innerHTML = "";
+    }, 4000);
+  }
+
+  const url = URL.parse(window.location.href);
+  const params = new URLSearchParams(url.search);
+  const ws = new WebSocket(`ws://${WSSERVER}:${WSPORT}`);
+  const cols = params.get("cols") || 15; // defauts to ilder layout
+  const rows = params.get("rows") || 5;
+  const image = params.get("image");
+  if (image) {
+    const imagedef = images[image];
+    console.log(imagedef);
+    viewer.addTiledImage({
+      tileSource: {
+        ...imagedef,
+        getTileUrl: function (level, x, y) {
+          const lvl = 0 == 0 ? (imagedef.maxLevel - level) : 0 - (imagedef.maxLevel - level);
+          return `http://${TILESERVER}:${TILEPORT}/tile/${image}/${lvl}/${x}/${y}`;
+        }
+      }
+    });
+  }
+  ws.addEventListener("open", () => {
+    viewer.addHandler('pan', update);
+    viewer.addHandler('zoom', update);
+    function update(event) {
+      const bb = viewer.viewport.getBounds()
+      console.log(`bounds;  ${viewer.viewport.getBounds()}`);
+
+      ws.send(JSON.stringify({
+        action: "update",
+        bounds: { x: bb.x, y: bb.y, w: bb.width, h: bb.height },
+        wall: { name: "wilder", rows: rows, cols: cols },
+        image: image
+      }));
+    }
+    ws.send(JSON.stringify({ action: "register", type: "controller", rows: rows, cols: cols }));
+    update();
+  });
+</script>
+
+</html>
