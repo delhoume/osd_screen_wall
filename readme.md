@@ -34,7 +34,7 @@ run khufu in a terminal:
 ./bin/khufu.[m1,win] -d html -f tiff -l http://0.0.0.0:8200
 ```
 
-start the wewbsocket server in an other terminal:
+start the wewsocket server in another terminal:
 ```
 cd server
 npm install
