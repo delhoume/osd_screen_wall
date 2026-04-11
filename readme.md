@@ -16,7 +16,7 @@ you can choose the way you distribute clients and access tiles,
  my prototype uses a single machine (only one lcoal khufu and all clients are on the same machine)
 khufu is not mandator, if you have a working tile source ycan use it, and a standard http server can serve html pages.
 
-For performnce reasons, on the wider wall there will be one khufu instances per client with data sources duplicated.
+For performance reasons, on the wider wall there will be one khufu instance per client with data sources duplicated.
 The controller will be indepedent and have its own copy of tif files
 
 When change happens on the controller (newimage selected, pan, zoom), a trivial WebSocket server broadcasts
@@ -58,6 +58,7 @@ clients now display their part of the wall, and update on controller change (zoo
 
 here is how it should look:
 
+![SCR-20260411-van](https://github.com/user-attachments/assets/041f8d98-5325-4340-b423-d59596c59b69)
 
 
 
