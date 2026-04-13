@@ -1,6 +1,6 @@
-This is a prototype of a giga(tera)pixel image viewer on a screen wall.
+This is a prototype of a giga(tera)pixel image viewer on a a screen wall.
 
-The current target screen wall is wilder from university saclay paris sud, 
+The current target screen wall is wilder from univ saclay paris sud, 
 75 identical square screens in a 15x5 layout.h
 Physical size is about 6x2 meters and definition is 14400x4800
 
@@ -14,13 +14,13 @@ each OSD instance is hosted in a web page and get it contents from my khufu tile
 (khufu also serves the html)
 you can choose the way you distribute clients and access tiles,
  my prototype uses a single machine (only one lcoal khufu and all clients are on the same machine)
-khufu is not mandatory , if you have a working tile source you can use it, and a standard http server can serve html pages.
+khufu is not mandator, if you have a working tile source ycan use it, and a standard http server can serve html pages.
 
-For performance reasons, on the wider wall there will be one khufu instance per client with data sources duplicated.
+For performnce reasons, on the wider wall there will be one khufu instances per client with data sources duplicated.
 The controller will be indepedent and have its own copy of tif files
 
 When change happens on the controller (newimage selected, pan, zoom), a trivial WebSocket server broadcasts
-all necessary info to all clients, and each updates according to its location on the wall.
+all necessary info to all clients, and each updates according to its location  on the wall.
 
 It is very simple but very effective system.
 
@@ -31,10 +31,10 @@ gigantic Mars surface image.
 setup:
 run khufu in a terminal:
 ```
-./bin/khufu.[m1,win] -d html -f tiff -l http://0.0.0.0:8200
+./bin/khufu.[m1,win] -d html -f tiff -p 8200
 ```
 
-start the wewsocket server in another terminal:
+start the websocket server in another terminal:
 ```
 cd server
 npm install
@@ -58,7 +58,6 @@ clients now display their part of the wall, and update on controller change (zoo
 
 here is how it should look:
 
-![SCR-20260411-van](https://github.com/user-attachments/assets/041f8d98-5325-4340-b423-d59596c59b69)
 
 
 
