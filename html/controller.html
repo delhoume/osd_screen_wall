@@ -45,7 +45,7 @@
   const ws = new WebSocket(`ws://${WSSERVER}:${WSPORT}`);
   const cols = params.get("cols") || 15; // defauts to ilder layout
   const rows = params.get("rows") || 5;
-  const image = params.get("image");
+  const image = params.get("image") || "noirlab2424a";
   if (image) {
     const imagedef = images[image];
     console.log(imagedef);
