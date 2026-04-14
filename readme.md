@@ -14,9 +14,9 @@ each OSD instance is hosted in a web page and get it contents from my khufu tile
 (khufu also serves the html)
 you can choose the way you distribute clients and access tiles in the network,
  my prototype uses a single machine (only one lcoal khufu and all clients are on the same machine)
-khufu is not mandator, if you have a working tile source ycan use it, and a standard http server can serve html pages.
+khufu is not mandatory, if you have a working tile source you can use it, and a standard http server can serve html pages.
 
-For performnce reasons, on the wider wall there will be one khufu instance per client with data sources duplicated.
+For performance reasons, on the wider wall there will be one khufu instance per client with data sources duplicated.
 The controller will be independent and have its own copy of tif files
 
 When change happens on the controller (newimage selected, pan, zoom), a trivial WebSocket server broadcasts
