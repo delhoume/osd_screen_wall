@@ -45,7 +45,7 @@ open 3 client browser windows
 ```
 http://localhost:8200/client.html?x=0&y=0&w=5&h=5
 http://localhost:8200/client.html?x=5&y=0&w=5&h=5
-http://localhost:8200/client.html?x=5&y=0&w=5&h=5
+http://localhost:8200/client.html?x=10&y=0&w=5&h=5
 ```
 resize them to match 1 ratio and dispose them horizontaly according to their x position
 
