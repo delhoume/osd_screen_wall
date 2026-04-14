@@ -1,31 +1,31 @@
-This is a prototype of a giga(tera)pixel image viewer on a a screen wall.
+This is a prototype of a giga(tera)pixel image viewer on a screen wall.
 
 The current target screen wall is wilder from univ saclay paris sud, 
-75 identical square screens in a 15x5 layout.h
+75 identical square screens in a 15x5 layout.
 Physical size is about 6x2 meters and definition is 14400x4800
 
 5 computers handle each a single 15x1 row of screens and are not synchronised in any way.
 
-I created  very simple system with:
+I created a very simple system with:
 - an OSD controller (defines the wall layout)
 - an arbitrary number of OSD clients, each defines a rectangular area in screens space
 
 each OSD instance is hosted in a web page and get it contents from my khufu tile server
 (khufu also serves the html)
-you can choose the way you distribute clients and access tiles,
+you can choose the way you distribute clients and access tiles in the network,
  my prototype uses a single machine (only one lcoal khufu and all clients are on the same machine)
 khufu is not mandator, if you have a working tile source ycan use it, and a standard http server can serve html pages.
 
-For performnce reasons, on the wider wall there will be one khufu instances per client with data sources duplicated.
-The controller will be indepedent and have its own copy of tif files
+For performnce reasons, on the wider wall there will be one khufu instance per client with data sources duplicated.
+The controller will be independent and have its own copy of tif files
 
 When change happens on the controller (newimage selected, pan, zoom), a trivial WebSocket server broadcasts
-all necessary info to all clients, and each updates according to its location  on the wall.
+all necessary info to all clients, and each updates according to its location on the wall.
 
-It is very simple but very effective system.
+It is a very simple but very effective system.
 
 you can use any OSD tile source but khufu allows to serve tiles from a single bigtiff 
-file of unlimited dimensions, this makes things much easier For terapixel imagews such as my
+file of unlimited dimensions, this makes things much easier For terapixel images such as my
 gigantic Mars surface image.
 
 setup:
@@ -54,6 +54,7 @@ open the controller browser window
 ```
 http://localhost:8200/controller.html?rows=5&cols=15&image=noirlab2424a
 ```
+ratio is 3
 clients now display their part of the wall, and update on controller change (zoom/pan/image)
 
 here is how it should look:
