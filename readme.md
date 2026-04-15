@@ -10,10 +10,10 @@ I created a very simple system with:
 - an OSD controller (defines the wall layout)
 - an arbitrary number of OSD clients, each defines a rectangular area in screens space
 
-each OSD instance is hosted in a web page and get it contents from my khufu tile server
+each OSD instance is hosted in a web page and get its contents from my khufu tile server
 (khufu also serves the html)
 you can choose the way you distribute clients and access tiles in the network,
- my prototype uses a single machine (only one lcoal khufu and all clients are on the same machine)
+ my prototype uses a single machine (only one lcoal khufu and all clients / controller are on the same machine)
 khufu is not mandatory, if you have a working tile source you can use it, and a standard http server can serve html pages.
 
 For performance reasons, on the wider wall there will be one khufu instance per client with data sources duplicated.
@@ -31,7 +31,10 @@ gigantic Mars surface image.
 setup:
 run khufu in a terminal:
 ```
-./bin/khufu.[m1,win] -d html -f tiff -p 8200
+# macos
+./bin/khufu_0.4_macos_arm64 -d html -f tiff -p 8200
+# windows
+.\bin\khufu_0.4_win_amd64.exe -d html -f tiff -p 8200
 ```
 
 start the websocket server in another terminal:
@@ -41,18 +44,27 @@ npm install
 npm run start
 ```
 
-open 3 client browser windows
+open 3 client URLs
 ```
-http://localhost:8200/client.html?x=0&y=0&w=5&h=5
-http://localhost:8200/client.html?x=5&y=0&w=5&h=5
-http://localhost:8200/client.html?x=10&y=0&w=5&h=5
+# macos
+open "http://localhost:8200/client.html?x=0&y=0&w=5&h=5"
+open "http://localhost:8200/client.html?x=5&y=0&w=5&h=5"
+open "http://localhost:8200/client.html?x=10&y=0&w=5&h=5"
+
+# windows
+start "open" "http://localhost:8200/client.html?x=0&y=0&w=5&h=5"
+start "open" "http://localhost:8200/client.html?x=5&y=0&w=5&h=5"
+start "open" "http://localhost:8200/client.html?x=10&y=0&w=5&h=5"
 ```
-resize them to match 1 ratio and dispose them horizontaly according to their x position
+resize them to match 1 ratio and dispose them horizontaly according to their position
 
 
-open the controller browser window
+open the controller URL
 ```
-http://localhost:8200/controller.html?rows=5&cols=15&image=noirlab2424a
+# macos
+open "http://localhost:8200/controller.html?rows=5&cols=15&image=noirlab2424a"
+# windows
+start "open" "http://localhost:8200/controller.html?rows=5&cols=15&image=noirlab2424a"
 ```
 ratio is 3
 clients now display their part of the wall, and update on controller change (zoom/pan/image)
